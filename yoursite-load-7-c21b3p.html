@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' https:; style-src 'unsafe-inline' https:; img-src data: blob: https:; media-src data: blob: https:; frame-src https: data: blob:; object-src https: data:; font-src data: https:; connect-src https: wss:; worker-src blob: https:;">
+<base href="about:blank">
+
+<style></style>
+
+</head>
+<body>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Amatic+SC:400&amp;display=swap">
+
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>P2P V3</title>
+  <link rel="icon" href="https://codeberg.org/HtmlLol/P2P-EMIS/raw/branch/main/download%20%281%29.png">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #080808; color: #f3f3f3; line-height: 1.6; }
+    main { min-height: 100vh; padding: 3rem 1rem 5rem; }
+    .container { max-width: 52rem; margin: 0 auto; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; gap: 1rem; flex-wrap: wrap; }
+    .topbar-left { display: flex; align-items: center; gap: 1rem; }
+    .icon { display: flex; align-items: center; justify-content: center; width: 2.75rem; height: 2.75rem; border-radius: 0.5rem; background: #f97316; color: white; flex-shrink: 0; overflow: hidden; }
+    h1 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.025em; }
+    .subtitle { font-size: 0.8rem; color: #a3a3a3; }
+    .topbar-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+    .btn-sm { padding: 0.4rem 0.85rem; border: 1px solid #2a2a2a; border-radius: 0.375rem; background: #1a1a1a; color: #f3f3f3; font-size: 0.8rem; font-weight: 500; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+    .btn-sm:hover { background: #2a2a2a; border-color: #em; color: #f3f3f3; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+    .form-group:last-child { margin-bottom: 0; }
+    label { font-size: 0.8rem; font-weight: 500; color: #ccc; }
+    input[type="text"], input[type="number"], textarea, select { background: #080808; border: 1px solid #2a2a2a; border-radius: 0.375rem; color: #f3f3f3; padding: 0.5rem 0.75rem; font-family: inherit; font-size: 0.875rem; width: 100%; }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: #f97316; box-shadow: 0 0 0 3px rgba(249,115,22,0.12); }
+    textarea { resize: vertical; min-height: 56px; }
+    .help { font-size: 0.72rem; color: #666; }
+    .warn { font-size: 0.72rem; color: #f59e0b; }
+    .mode-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+    button { padding: 0.5rem 1rem; border: 1px solid #2a2a2a; border-radius: 0.375rem; background: #1e1e1e; color: #f3f3f3; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+    button:hover:not(:disabled) { background: #2a2a2a; }
+    button.active { background: #f97316; border-color: #f97316; color: #fff; }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
+    .file-input-wrapper { display: flex; align-items: center; gap: 0.75rem; }
+    .file-input-wrapper button { flex-shrink: 0; padding: 0.5rem 1rem; }
+    .file-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.8rem; color: #888; }
+    input[type="file"] { display: none; }
+    .submit-btn { background: #f97316; border-color: #f97316; padding: 0.75rem 1rem; font-weight: 600; width: 100%; font-size: 1rem; }
+    .submit-btn:hover:not(:disabled) { background: #ea580c; border-color: #ea580c; }
+    .preview-section { background: #0c0c0c; border: 1px solid #1e1e1e; border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem; }
+    .preview-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #666; margin-bottom: 0.6rem; }
+    .preview-link { font-family: "Monaco","Menlo",monospace; font-size: 0.7rem; color: #f97316; word-break: break-all; padding: 0.2rem 0; display: block; opacity: 0.85; }
+    .results { border: 1px solid #2a2a2a; border-radius: 0.75rem; background: #111; padding: 1.5rem; margin-top: 1.5rem; }
+    .results-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem; }
+    .results-title { font-size: 1.05rem; font-weight: 600; }
+    .results-subtitle { font-size: 0.75rem; color: #888; }
+    .cdn-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr)); gap: 0.4rem; margin-bottom: 1rem; }
+    .cdn-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.6rem; border: 1px solid #2a2a2a; border-radius: 0.375rem; background: #0e0e0e; cursor: pointer; font-size: 0.75rem; transition: all 0.15s; user-select: none; }
+    .cdn-item:hover { border-color: #444; }
+    .cdn-item.selected { border-color: #f97316; background: rgba(249,115,22,0.08); }
+    .cdn-item input[type="checkbox"] { display: none; }
+    .cdn-dot { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: #333; flex-shrink: 0; }
+    .cdn-item.selected .cdn-dot { background: #f97316; }
+    .cdn-name { font-weight: 500; color: #ccc; }
+    .cdn-item.selected .cdn-name { color: #f3f3f3; }
+    .sort-row { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem; }
+    .sort-row label { font-size: 0.75rem; color: #888; white-space: nowrap; }
+    .sort-row select { width: auto; padding: 0.35rem 0.6rem; font-size: 0.8rem; }
+    .action-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .action-row button { flex: 1 1 8rem; font-size: 0.8rem; padding: 0.45rem 0.75rem; }
+    .url-list { display: flex; flex-direction: column; gap: 0.3rem; font-family: "Monaco","Menlo",monospace; font-size: 0.7rem; max-height: 32rem; overflow-y: auto; padding-right: 0.25rem; }
+    .url-list::-webkit-scrollbar { width: 4px; }
+    .url-list::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+    .url-item { padding: 0.15rem 0; word-break: break-all; line-height: 1.4; }
+    .url-item a { color: #f97316; text-decoration: none; }
+    .url-item a:hover { text-decoration: underline; }
+    .shortfall { font-size: 0.75rem; color: #f59e0b; margin-bottom: 0.75rem; }
+    .failed-section { margin-top: 1rem; padding: 0.75rem; border: 1px solid rgba(239,68,68,0.25); border-radius: 0.375rem; background: rgba(239,68,68,0.05); }
+    .failed-header { font-weight: 600; color: #ef4444; margin-bottom: 0.4rem; font-size: 0.8rem; }
+    .failed-item { font-size: 0.7rem; color: #888; padding: 0.1rem 0; }
+    .editor-row { display: flex; gap: 0.5rem; align-items: flex-end; }
+    .editor-row input { flex: 1; }
+    .toast { position: fixed; bottom: 1rem; right: 1rem; padding: 0.85rem 1rem; border-radius: 0.5rem; font-size: 0.8rem; max-width: 22rem; animation: slideIn 0.25s ease-out; z-index: 9999; pointer-events: none; }
+    .toast.error { background: #7f1d1d; border: 1px solid #dc2626; color: #fecaca; }
+    .toast.success { background: #064e3b; border: 1px solid #059669; color: #a7f3d0; }
+    .toast.info { background: #1c1108; border: 1px solid #f97316; color: #fed7aa; }
+    @keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    .hidden { display: none !important; }
+    code { background: #080808; padding: 0.1rem 0.35rem; border-radius: 0.25rem; font-family: "Monaco","Menlo",monospace; font-size: 0.82em; }
+    .progress-bar-wrap { height: 3px; background: #1e1e1e; border-radius: 2px; overflow: hidden; }
+    .progress-bar { height: 100%; background: #f97316; transition: width 0.2s; width: 0%; }
+    .log-panel { font-family: "Monaco","Menlo",monospace; font-size: 0.68rem; color: #888; background: #080808; border: 1px solid #1e1e1e; border-radius: 0.375rem; padding: 0.6rem 0.75rem; max-height: 14rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.15rem; }
+    .log-panel::-webkit-scrollbar { width: 4px; }
+    .log-panel::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+    .log-line { line-height: 1.5; }
+    .log-line.ok { color: #10b981; }
+    .log-line.err { color: #ef4444; }
+    .log-line.info { color: #f97316; }
+    .log-line.dim { color: #555; }
+    .tag { display: inline-block; padding: 0.1rem 0.4rem; border-radius: 0.25rem; font-size: 0.65rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; background: #1e1e1e; color: #888; }
+    @media (max-width: 480px) { .cdn-grid { grid-template-columns: 1fr 1fr; } }
+  </style>
+
+
+<main>
+<div class="container">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="icon">
+        <img src="https://codeberg.org/HtmlLol/P2P-EMIS/raw/branch/main/download%20%281%29.png" width="45" height="40" alt="">
+      </div>
+      <div>
+        <h1>P2P V3</h1>
+        <p class="subtitle">Any file type Â· multi-CDN Â· V3</p>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <a href="https://discord.gg/b6QRdA7bjR" target="_blank" rel="noopener" class="btn-sm discord">ð¬ Join Discord</a>
+      <button class="btn-sm" id="download-page-btn">â¬ Download Page</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Configuration</div>
+
+    <div class="form-group">
+      <label for="token">GitHub tokens (one per line)</label>
+      <textarea id="token" rows="2" placeholder="ghp_token1, ghp_token2, ghp_token3" autocomplete="off" style="font-family:'Monaco','Menlo',monospace;font-size:0.75rem;"></textarea>
+      <p class="help">Needs <code>repo</code> scope. Multiple tokens comma-separated â auto-rotates when one hits API limits. <a href="https://github.com/settings/tokens/new" target="_blank" style="color:#f97316">Generate one</a></p>
+    </div>
+
+    <div class="form-group">
+      <label>Mode</label>
+      <div class="mode-buttons">
+        <button type="button" class="mode-btn active" data-mode="auto">Auto (recommended)</button>
+        <button type="button" class="mode-btn" data-mode="explicit">Pick repos</button>
+      </div>
+    </div>
+
+    <div id="mode-auto-panel">
+      <div class="form-group">
+        <label for="auto-prefix">Repo prefix</label>
+        <input type="text" id="auto-prefix" placeholder="e.g. p2p-files" value="p2p-files">
+        <p class="help">Creates <code>&lt;prefix&gt;-1</code>, <code>&lt;prefix&gt;-2</code>, â¦ as needed. Existing repos are reused and skipped if full.</p>
+      </div>
+      <div class="form-group">
+        <label for="auto-readme">README template <span class="tag">optional</span></label>
+        <textarea id="auto-readme" rows="2" placeholder="# {repoName}
+Published via P2P V3."></textarea>
+        <p class="help">Placeholders: <code>{repoName}</code> <code>{count}</code></p>
+      </div>
+    </div>
+
+    <div id="mode-explicit-panel" class="hidden">
+      <div class="form-group">
+        <label for="repos-input">Repos (one per line, owner/repo)</label>
+        <textarea id="repos-input" placeholder="owner/repo-1
+owner/repo-2" rows="4"></textarea>
+        <p class="help">No per-repo cap. Overflow still spills across auto-created repos using the prefix above if needed.</p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Source</label>
+      <div class="mode-buttons">
+        <button type="button" class="source-btn active" data-source="file">File</button>
+        <button type="button" class="source-btn" data-source="url">URL</button>
+      </div>
+    </div>
+
+    <div id="source-file-panel" class="form-group">
+      <label>File (any type)</label>
+      <div class="file-input-wrapper">
+        <button type="button" id="file-btn">Choose file</button>
+        <span class="file-name" id="file-name">No file selected</span>
+      </div>
+      <input type="file" id="file-input">
+    </div>
+
+    <div id="source-url-panel" class="form-group hidden">
+      <label for="source-url">URL</label>
+      <input type="text" id="source-url" placeholder="https://example.com/page.html" autocomplete="off">
+      <p class="help">Fetches the URL and publishes that content. Extension is taken from the path or Content-Type. If CORS blocks the request, a proxy fallback is tried.</p>
+    </div>
+
+    <div class="form-group">
+      <label for="main-words">Main words</label>
+      <textarea id="main-words">yoursite, yoursitename, sitename</textarea>
+      <p class="help">Your site's identity words â replace with your actual site name/brand. These appear in every filename. Comma-separated.</p>
+    </div>
+
+    <div class="form-group">
+      <label for="side-words">Side words</label>
+      <textarea id="side-words">game, play, load, fetch, pixel, cloud, run, view, code, hub</textarea>
+      <p class="help">Provides filename randomness. More = more unique links.</p>
+    </div>
+
+    <div class="form-group">
+      <label for="count">How many files / links?</label>
+      <input type="number" id="count" min="1" step="1" value="10" placeholder="Any amount e.g. 100000">
+      <p class="help">Any amount â no max. Links are generated for every file Ã selected CDNs. Huge batches: use Copy all / Download (UI shows first 500). HTML/JS/CSS stored as full UTF-8 source.</p>
+      <p class="warn hidden" id="count-warning"></p>
+    </div>
+
+    <div class="preview-section">
+      <div class="preview-label">Live preview (not yet published)</div>
+      <div id="preview-links"><a class="preview-link" href="https://githubraw.com/user/p2p-files-1/main/yoursitename-view-1-mzxzmp.bin" target="_blank" rel="noopener">https://githubraw.com/user/p2p-files-1/main/yoursitename-view-1-mzxzmp.bin</a><a class="preview-link" href="https://githubraw.com/user/p2p-files-1/main/yoursitename-view-2-tc24h8.bin" target="_blank" rel="noopener">https://githubraw.com/user/p2p-files-1/main/yoursitename-view-2-tc24h8.bin</a><a class="preview-link" href="https://githubraw.com/user/p2p-files-1/main/sitename-hub-3-c63bee.bin" target="_blank" rel="noopener">https://githubraw.com/user/p2p-files-1/main/sitename-hub-3-c63bee.bin</a><a class="preview-link" href="https://githubraw.com/user/p2p-files-1/main/yoursitename-run-4-7xtwr0.bin" target="_blank" rel="noopener">https://githubraw.com/user/p2p-files-1/main/yoursitename-run-4-7xtwr0.bin</a><a class="preview-link" href="https://githubraw.com/user/p2p-files-1/main/yoursite-run-5-1079p5.bin" target="_blank" rel="noopener">https://githubraw.com/user/p2p-files-1/main/yoursite-run-5-1079p5.bin</a></div>
+    </div>
+
+    <div id="progress-panel" class="hidden" style="margin-bottom:1rem;">
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">
+        <div class="progress-bar-wrap" style="flex:1;margin:0;"><div class="progress-bar" id="progress-bar" style="width: 47%;"></div></div>
+        <span id="progress-pct" style="font-size:0.75rem;color:#888;white-space:nowrap;min-width:3.5rem;text-align:right;">44,000 / 100,000 committed (quota: 4,373)</span>
+      </div>
+      <div class="log-panel" id="progress-log"></div>
+    </div>
+
+    <button type="button" class="submit-btn" id="submit-btn">Publish to GitHub</button>
+  </div>
+
+  <div id="results" class="results hidden">
+    <div class="results-header">
+      <div>
+        <div class="results-title" id="results-title">100,000 files published</div>
+        <div class="results-subtitle" id="results-subtitle">300,000 total links Â· 3 CDN(s) Â· showing 100</div>
+      </div>
+    </div>
+
+    <p class="shortfall hidden" id="shortfall"></p>
+
+    <div class="card-title" style="font-size:0.8rem;margin-bottom:0.5rem;">CDN providers</div>
+    <p class="help" style="margin-bottom:0.5rem;">â = serves <code>text/html</code> so pages <b>render</b>. jsDelivr forces HTML to <code>text/plain</code> (source only) by design â fine for Discord embeds, not for opening as a site.</p>
+    <div class="cdn-grid" id="cdn-grid"><label class="cdn-item selected"><input type="checkbox"><span class="cdn-dot"></span><span class="cdn-name">githubraw.com â</span></label><label class="cdn-item selected"><input type="checkbox"><span class="cdn-dot"></span><span class="cdn-name">cdn.githubraw â</span></label><label class="cdn-item selected"><input type="checkbox"><span class="cdn-dot"></span><span class="cdn-name">htmlpreview â</span></label><label class="cdn-item"><input type="checkbox"><span class="cdn-dot"></span><span class="cdn-name">raw.githack</span></label><label class="cdn-item"><input type="checkbox"><span class="cdn-dot"></span><span class="cdn-name">rawcdn.githack</span></label><label class="cdn-item"><input type="checkbox"><span class="cdn-dot"></span><span class="cdn-name">jsDelivr (source)</span></label><label class="cdn-item"><input type="checkbox"><span class="cdn-dot"></span><span class="cdn-name">Fastly jsDelivr (source)</span></label><label class="cdn-item"><input type="checkbox"><span class="cdn-dot"></span><span class="cdn-name">Gcore jsDelivr (source)</span></label><label class="cdn-item"><input type="checkbox"><span class="cdn-dot"></span><span class="cdn-name">TestingCF jsDelivr (source)</span></label><label class="cdn-item"><input type="checkbox"><span class="cdn-dot"></span><span class="cdn-name">esm.sh</span></label><label class="cdn-item"><input type="checkbox"><span class="cdn-dot"></span><span class="cdn-name">raw.esm.sh</span></label><label class="cdn-item"><input type="checkbox"><span class="cdn-dot"></span><span class="cdn-name">cdn.esm.sh</span></label><label class="cdn-item"><input type="checkbox"><span class="cdn-dot"></span><span class="cdn-name">jsd.onmicrosoft.cn</span></label><label class="cdn-item"><input type="checkbox"><span class="cdn-dot"></span><span class="cdn-name">cdn.jsdmirror.com</span></label></div>
+    <div style="display:flex;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap;">
+      <button class="btn-sm" id="cdn-select-all">All</button>
+      <button class="btn-sm" id="cdn-select-html">HTML render â</button>
+      <button class="btn-sm" id="cdn-select-jsdelivr">jsDelivr (source)</button>
+      <button class="btn-sm" id="cdn-select-githack">Githack</button>
+      <button class="btn-sm" id="cdn-select-none">None</button>
+    </div>
+
+    <div class="sort-row">
+      <label>Sort:</label>
+      <select id="sort-mode">
+        <option value="random">Random</option>
+        <option value="cycle-cdn">Cycle CDN (1 per CDN, repeat)</option>
+        <option value="cycle-file">Cycle file (all CDNs per file)</option>
+        <option value="grouped-cdn">Grouped by CDN</option>
+        <option value="grouped-repo">Grouped by repo</option>
+        <option value="sequential">Sequential</option>
+      </select>
+    </div>
+
+    <div class="action-row">
+      <button id="copy-all-btn">Copy all</button>
+      <button id="download-links-btn">Download .txt</button>
+      <button id="download-links-json-btn">Download .json</button>
+      <button id="open-random-btn">Open random</button>
+    </div>
+
+    <div id="repos-container"></div>
+    <div id="failed-container"></div>
+  </div>
+
+  <div class="card" style="margin-top:1.5rem;">
+    <div class="card-title">Repo File Editor <span class="tag">update existing links</span></div>
+    <p class="help" style="margin-bottom:0.75rem;">Load a repo and overwrite all matching files with a new file in one commit. Good for updating already-published CDN links.</p>
+    <div class="editor-row">
+      <div class="form-group" style="flex:1;margin:0;">
+        <label for="editor-repo">Repo (owner/repo)</label>
+        <input type="text" id="editor-repo" placeholder="owner/repo">
+      </div>
+      <button id="editor-load-btn" style="flex-shrink:0;height:2.25rem;">Load</button>
+    </div>
+    <div id="editor-status" style="font-size:0.75rem;color:#888;margin-top:0.5rem;"></div>
+    <div id="editor-panel" class="hidden" style="margin-top:0.75rem;">
+      <div class="form-group">
+        <label>New file</label>
+        <div class="file-input-wrapper">
+          <button type="button" id="editor-file-btn">Choose file</button>
+          <span class="file-name" id="editor-file-name">No file selected</span>
+        </div>
+        <input type="file" id="editor-file-input">
+      </div>
+      <button id="editor-submit-btn" class="submit-btn" style="margin-top:0.5rem;">Rewrite all files</button>
+      <div id="editor-progress-panel" class="hidden" style="margin-top:0.5rem;">
+        <div class="progress-bar-wrap"><div class="progress-bar" id="editor-progress-bar"></div></div>
+        <div class="log-panel" id="editor-log" style="margin-top:0.4rem;max-height:8rem;"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</main>
+<script>
+// âââ CDN PROVIDERS ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+const CDN_PROVIDERS=[
+  // htmlOk:true â serves text/html so pages RENDER in the browser
+  // htmlOk:false â text/plain (source view only) â fine for embeds/JS/CSS
+  {id:"githubraw",     label:"githubraw.com â",      group:"githubraw", htmlOk:true,  fn:(r,b,f)=>`https://githubraw.com/${r}/${b}/${f}`},
+  {id:"cdn-githubraw", label:"cdn.githubraw â",      group:"githubraw", htmlOk:true,  fn:(r,b,f)=>`https://cdn.githubraw.com/${r}/${b}/${f}`},
+  {id:"htmlpreview",   label:"htmlpreview â",        group:"preview",   htmlOk:true,  fn:(r,b,f)=>`https://htmlpreview.github.io/?https://raw.githubusercontent.com/${r}/${b}/${f}`},
+  {id:"raw-githack",   label:"raw.githack",          group:"githack",   htmlOk:true,  fn:(r,b,f)=>`https://raw.githack.com/${r}/${b}/${f}`},
+  {id:"rawcdn-githack",label:"rawcdn.githack",       group:"githack",   htmlOk:true,  fn:(r,b,f)=>`https://rawcdn.githack.com/${r}/${b}/${f}`},
+  {id:"jsdelivr",      label:"jsDelivr (source)",    group:"jsdelivr",  htmlOk:false, fn:(r,b,f)=>`https://cdn.jsdelivr.net/gh/${r}@${b}/${f}`},
+  {id:"fastly",        label:"Fastly jsDelivr (source)", group:"jsdelivr", htmlOk:false, fn:(r,b,f)=>`https://fastly.jsdelivr.net/gh/${r}@${b}/${f}`},
+  {id:"gcore",         label:"Gcore jsDelivr (source)",  group:"jsdelivr", htmlOk:false, fn:(r,b,f)=>`https://gcore.jsdelivr.net/gh/${r}@${b}/${f}`},
+  {id:"testingcf",     label:"TestingCF jsDelivr (source)", group:"jsdelivr", htmlOk:false, fn:(r,b,f)=>`https://testingcf.jsdelivr.net/gh/${r}@${b}/${f}`},
+  {id:"esm-sh",        label:"esm.sh",               group:"esm",       htmlOk:false, fn:(r,b,f)=>`https://esm.sh/gh/${r}@${b}/${f}`},
+  {id:"raw-esm-sh",    label:"raw.esm.sh",           group:"esm",       htmlOk:false, fn:(r,b,f)=>`https://raw.esm.sh/gh/${r}@${b}/${f}`},
+  {id:"esm-cdn",       label:"cdn.esm.sh",           group:"esm",       htmlOk:false, fn:(r,b,f)=>`https://cdn.esm.sh/gh/${r}@${b}/${f}`},
+  {id:"jsd-ms",        label:"jsd.onmicrosoft.cn",   group:"mirror",    htmlOk:false, fn:(r,b,f)=>`https://jsd.onmicrosoft.cn/gh/${r}@${b}/${f}`},
+  {id:"jsdmirror",     label:"cdn.jsdmirror.com",    group:"mirror",    htmlOk:false, fn:(r,b,f)=>`https://cdn.jsdmirror.com/gh/${r}@${b}/${f}`},
+];
+
+const API="https://api.github.com";
+const API_VER="2022-11-28";
+const MAX_PER_REPO=50000; // split across repos only for very large batches
+const TREE_CHUNK=5000;
+const DISPLAY_LIMIT=500; // UI only â copy/download always includes every link
+const CONCURRENCY = 1;          // serial â required for single-token
+const SECONDARY_BASE_MS = 250;
+const SECONDARY_MAX_MS  = 900;    // hard cap, never climb
+const PRIMARY_WAIT_CAP  = 45 * 60 * 1000;
+const SECONDARY_COOL_MS = 800;
+
+// âââ STATE ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+const state={mode:"auto",selectedCdns:new Set(["githubraw","cdn-githubraw","htmlpreview"]),sortMode:"random",result:null,allLinks:[]};
+
+// âââ DOM REFS âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+const $=id=>document.getElementById(id);
+const $token=$("token"),$autoPrefix=$("auto-prefix"),$autoReadme=$("auto-readme");
+const $reposInput=$("repos-input"),$fileBtn=$("file-btn"),$fileInput=$("file-input");
+const $fileName=$("file-name"),$mainWords=$("main-words"),$sideWords=$("side-words");
+const $count=$("count"),$countWarning=$("count-warning"),$submitBtn=$("submit-btn");
+const $results=$("results"),$resultsTitle=$("results-title"),$resultsSub=$("results-subtitle");
+const $reposContainer=$("repos-container"),$failedContainer=$("failed-container");
+const $shortfall=$("shortfall"),$cdnGrid=$("cdn-grid"),$sortMode=$("sort-mode");
+const $copyAllBtn=$("copy-all-btn"),$dlLinksBtn=$("download-links-btn");
+const $dlJsonBtn=$("download-links-json-btn"),$openRandomBtn=$("open-random-btn");
+const $dlPageBtn=$("download-page-btn"),$progressPanel=$("progress-panel");
+const $progressBar=$("progress-bar"),$progressPct=$("progress-pct"),$progressLog=$("progress-log");
+const $previewLinks=$("preview-links"),$editorRepo=$("editor-repo");
+const $editorLoadBtn=$("editor-load-btn"),$editorStatus=$("editor-status");
+const $editorPanel=$("editor-panel"),$editorFileBtn=$("editor-file-btn");
+const $editorFileInput=$("editor-file-input"),$editorFileName=$("editor-file-name");
+const $editorSubmitBtn=$("editor-submit-btn");
+const $editorProgressPanel=$("editor-progress-panel");
+const $editorProgressBar=$("editor-progress-bar"),$editorLog=$("editor-log");
+
+// âââ LOG ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+function log(panel,msg,type=""){
+  const el=document.createElement("div");
+  el.className="log-line"+(type?" "+type:"");
+  el.textContent="["+new Date().toLocaleTimeString()+"] "+msg;
+  panel.appendChild(el);panel.scrollTop=panel.scrollHeight;
+}
+
+// âââ CDN GRID âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+function buildCdnGrid(){
+  $cdnGrid.innerHTML="";
+  CDN_PROVIDERS.forEach(cdn=>{
+    const el=document.createElement("label");
+    el.className="cdn-item"+(state.selectedCdns.has(cdn.id)?" selected":"");
+    el.innerHTML=`<input type="checkbox"><span class="cdn-dot"></span><span class="cdn-name">${cdn.label}</span>`;
+    el.addEventListener("click",e=>{e.preventDefault();state.selectedCdns.has(cdn.id)?state.selectedCdns.delete(cdn.id):state.selectedCdns.add(cdn.id);el.classList.toggle("selected",state.selectedCdns.has(cdn.id));rerenderLinks();});
+    $cdnGrid.appendChild(el);
+  });
+}
+buildCdnGrid();
+$("cdn-select-all").onclick=()=>{CDN_PROVIDERS.forEach(c=>state.selectedCdns.add(c.id));buildCdnGrid();rerenderLinks();};
+$("cdn-select-none").onclick=()=>{state.selectedCdns.clear();buildCdnGrid();rerenderLinks();};
+$("cdn-select-jsdelivr").onclick=()=>{state.selectedCdns.clear();CDN_PROVIDERS.filter(c=>c.group==="jsdelivr").forEach(c=>state.selectedCdns.add(c.id));buildCdnGrid();rerenderLinks();};
+$("cdn-select-githack").onclick=()=>{state.selectedCdns.clear();CDN_PROVIDERS.filter(c=>c.group==="githack").forEach(c=>state.selectedCdns.add(c.id));buildCdnGrid();rerenderLinks();};
+$("cdn-select-html").onclick=()=>{state.selectedCdns.clear();CDN_PROVIDERS.filter(c=>c.htmlOk).forEach(c=>state.selectedCdns.add(c.id));buildCdnGrid();rerenderLinks();};
+document.querySelectorAll(".mode-btn").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    state.mode=btn.dataset.mode;
+    document.querySelectorAll(".mode-btn").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    $("mode-auto-panel").classList.toggle("hidden",state.mode!=="auto");
+    $("mode-explicit-panel").classList.toggle("hidden",state.mode!=="explicit");
+  });
+});
+let sourceMode="file";
+document.querySelectorAll(".source-btn").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    sourceMode=btn.dataset.source;
+    document.querySelectorAll(".source-btn").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    $("source-file-panel").classList.toggle("hidden",sourceMode!=="file");
+    $("source-url-panel").classList.toggle("hidden",sourceMode!=="url");
+    updatePreview();
+  });
+});
+$fileBtn.onclick=()=>$fileInput.click();
+$fileInput.onchange=()=>{
+  const f=$fileInput.files?.[0];if(!f)return;
+  $fileName.textContent=f.name;
+  const ext=getExt(f.name);
+  if(ext===".html"||ext===".htm"){
+    // jsDelivr serves HTML as text/plain â switch to CDNs that RENDER pages
+    state.selectedCdns.clear();
+    CDN_PROVIDERS.filter(c=>c.htmlOk).forEach(c=>state.selectedCdns.add(c.id));
+    buildCdnGrid();
+    showToast("HTML detected â using CDNs that render pages (not jsDelivr source)","info");
+  }
+  updatePreview();
+};
+$editorFileBtn.onclick=()=>$editorFileInput.click();
+$editorFileInput.onchange=()=>{const f=$editorFileInput.files?.[0];if(!f)return;$editorFileName.textContent=f.name;};
+$count.oninput=()=>{$countWarning.classList.add("hidden");updatePreview();};
+
+function updatePreview(){
+  const mw=splitWords($mainWords.value),sw=splitWords($sideWords.value);
+  const prefix=$autoPrefix.value.trim()||"owner";
+  if(!mw.length||!sw.length){$previewLinks.innerHTML=`<span style="font-size:.75rem;color:#555">Fill in words to see previews</span>`;return;}
+  const cdns=CDN_PROVIDERS.filter(c=>state.selectedCdns.has(c.id));
+  const cdn=cdns.length?cdns[0]:CDN_PROVIDERS[0];
+  let ext=".bin";
+  if(sourceMode==="url"){
+    ext=getExt(filenameFromUrl($("source-url")?.value||""))||".html";
+  }else{
+    ext=getExt($fileInput.files?.[0]?.name)||".bin";
+  }
+  const used=new Set();
+  const links=[];
+  let guard=0;
+  while(links.length<5&&guard++<50){
+    const m=toSlug(mw[0|Math.random()*mw.length]),s=toSlug(sw[0|Math.random()*sw.length]);
+    const num=links.length+1;
+    const rand=Math.random().toString(36).slice(2,8);
+    const file=`${m}-${s}-${num}-${rand}${ext}`;
+    if(used.has(file))continue;
+    used.add(file);
+    const url=cdn.fn(`user/${prefix}-1`,"main",file);
+    links.push(`<a class="preview-link" href="${url}" target="_blank" rel="noopener">${url}</a>`);
+  }
+  $previewLinks.innerHTML=links.join("");
+}
+[$mainWords,$sideWords,$autoPrefix].forEach(el=>el.addEventListener("input",updatePreview));
+$("source-url")?.addEventListener("input",updatePreview);
+updatePreview();
+$sortMode.onchange=()=>{state.sortMode=$sortMode.value;rerenderLinks();};
+
+function selectedCdns(){
+  return CDN_PROVIDERS.filter(c=>state.selectedCdns.has(c.id));
+}
+function totalLinkCount(){
+  if(!state.result)return 0;
+  const n = state._huge ? (state.result.publishedCount || 0) : state.allLinks.length;
+  const c=selectedCdns().length;
+  if(!c)return 0;
+  if(state.sortMode==="cycle-cdn")return n;
+  return n*c;
+}
+/** Build at most `limit` URLs (default all â avoid for huge batches). */
+function buildAllLinks(limit){
+  if(!state.result)return[];
+  const cdns=selectedCdns();
+  if(!cdns.length)return[];
+  let raw=state.allLinks;
+  // huge mode: synthesize a display sample from plan (full list only on download)
+  if(state._huge && state._plan && (!raw || !raw.length)){
+    const {assignments, mw, sw, ext, count:total} = state._plan;
+    const max = Math.min(limit == null ? DISPLAY_LIMIT : limit, total, DISPLAY_LIMIT);
+    raw = [];
+    for(let i=0;i<max;i++){
+      const a = assignments[Math.floor(i / MAX_PER_REPO)] || assignments[0];
+      raw.push({repo:a.fullName, branch:"main", file:makeFileName(i, mw, sw, ext)});
+    }
+  }
+  const max=limit==null?Infinity:Math.max(0,limit|0);
+  const out=[];
+  const push=u=>{if(out.length<max)out.push(u);};
+
+  if(state.sortMode==="grouped-cdn"){
+    outer: for(const c of cdns){
+      for(const x of raw){push(c.fn(x.repo,x.branch,x.file));if(out.length>=max)break outer;}
+    }
+  }else if(state.sortMode==="grouped-repo"){
+    const byR={};
+    raw.forEach(x=>{(byR[x.repo]=byR[x.repo]||[]).push(x);});
+    outer: for(const xs of Object.values(byR)){
+      for(const x of xs){
+        for(const c of cdns){push(c.fn(x.repo,x.branch,x.file));if(out.length>=max)break outer;}
+      }
+    }
+  }else if(state.sortMode==="cycle-cdn"){
+    for(let i=0;i<raw.length&&out.length<max;i++){
+      const c=cdns[i%cdns.length],x=raw[i];
+      push(c.fn(x.repo,x.branch,x.file));
+    }
+  }else if(state.sortMode==="random"){
+    // Sample without building the full list: pick random fileÃcdn pairs
+    const n=raw.length, m=cdns.length, total=n*m;
+    if(total<=max){
+      for(const x of raw)for(const c of cdns)out.push(c.fn(x.repo,x.branch,x.file));
+      for(let i=out.length-1;i>0;i--){const j=0|Math.random()*(i+1);[out[i],out[j]]=[out[j],out[i]];}
+    }else{
+      const seen=new Set();
+      let guard=0;
+      while(out.length<max&&guard++<max*8){
+        const i=0|Math.random()*n, j=0|Math.random()*m;
+        const key=i+":"+j;
+        if(seen.has(key))continue;
+        seen.add(key);
+        const x=raw[i],c=cdns[j];
+        out.push(c.fn(x.repo,x.branch,x.file));
+      }
+    }
+  }else{
+    // sequential / cycle-file / default â file then all CDNs
+    outer: for(const x of raw){
+      for(const c of cdns){push(c.fn(x.repo,x.branch,x.file));if(out.length>=max)break outer;}
+    }
+  }
+  return out;
+}
+/** Stream every URL into a Blob without holding the full string list in RAM. */
+async function downloadAllLinks(filename,asJson){
+  const cdns=selectedCdns();
+  if(!state.result||!cdns.length){showToast("No links","error");return;}
+  const total=totalLinkCount();
+  showToast(`Building ${total.toLocaleString()} linksâ¦`,"info");
+  await sleep(30);
+  const parts=[];
+  let chunk=[];
+  const flush=()=>{if(chunk.length){parts.push(chunk.join(""));chunk=[];}};
+  const addLine=s=>{chunk.push(s);if(chunk.length>=5000)flush();};
+
+  if(asJson)addLine("[\n");
+  let first=true, count=0;
+  const emit=url=>{
+    if(asJson){addLine((first?"":",\n")+"  "+JSON.stringify(url));first=false;}
+    else addLine(url+"\n");
+    count++;
+  };
+
+  // huge mode: stream names from plan without allocating full array
+  if(state._huge && state._plan){
+    const {assignments, mw, sw, ext, count: fileCount} = state._plan;
+    const cycle = state.sortMode === "cycle-cdn";
+    const grouped = state.sortMode === "grouped-cdn";
+    if(grouped){
+      for(const c of cdns){
+        for(let i=0;i<fileCount;i++){
+          const a = assignments[Math.floor(i / MAX_PER_REPO)];
+          emit(c.fn(a.fullName, "main", makeFileName(i, mw, sw, ext)));
+        }
+      }
+    } else if(cycle){
+      for(let i=0;i<fileCount;i++){
+        const a = assignments[Math.floor(i / MAX_PER_REPO)];
+        const c = cdns[i % cdns.length];
+        emit(c.fn(a.fullName, "main", makeFileName(i, mw, sw, ext)));
+      }
+    } else {
+      for(let i=0;i<fileCount;i++){
+        const a = assignments[Math.floor(i / MAX_PER_REPO)];
+        const file = makeFileName(i, mw, sw, ext);
+        for(const c of cdns) emit(c.fn(a.fullName, "main", file));
+      }
+    }
+  } else {
+    const raw=state.allLinks;
+    if(state.sortMode==="cycle-cdn"){
+      for(let i=0;i<raw.length;i++) emit(cdns[i%cdns.length].fn(raw[i].repo,raw[i].branch,raw[i].file));
+    }else if(state.sortMode==="grouped-cdn"){
+      for(const c of cdns) for(const x of raw) emit(c.fn(x.repo,x.branch,x.file));
+    }else{
+      for(const x of raw) for(const c of cdns) emit(c.fn(x.repo,x.branch,x.file));
+    }
+  }
+  if(asJson)addLine("\n]\n");
+  flush();
+  const blob=new Blob(parts,{type:asJson?"application/json":"text/plain;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),2000);
+  showToast(`${count.toLocaleString()} links downloaded`,"success");
+}
+function rerenderLinks(){
+  if(!state.result)return;
+  const total=totalLinkCount();
+  const display=buildAllLinks(DISPLAY_LIMIT);
+  $resultsTitle.textContent=`${state.result.publishedCount.toLocaleString()} files published`;
+  $resultsSub.textContent=`${total.toLocaleString()} total links Â· ${selectedCdns().length} CDN(s) Â· showing ${display.length.toLocaleString()}${total>display.length?" (Copy/Download for full list)":""}`;
+  $reposContainer.innerHTML="";
+  if(!display.length){$reposContainer.innerHTML=`<p style="font-size:.8rem;color:#666">Select a CDN provider.</p>`;return;}
+  const list=document.createElement("div");list.className="url-list";
+  // DocumentFragment avoids reflow thrash
+  const frag=document.createDocumentFragment();
+  for(const url of display){
+    const row=document.createElement("div");row.className="url-item";
+    const a=document.createElement("a");a.href=url;a.target="_blank";a.rel="noopener noreferrer";a.textContent=url;
+    row.appendChild(a);frag.appendChild(row);
+  }
+  list.appendChild(frag);
+  $reposContainer.appendChild(list);
+  if(total>display.length){
+    const note=document.createElement("p");
+    note.style.cssText="font-size:.72rem;color:#666;margin-top:.5rem;";
+    note.textContent=`Showing ${display.length.toLocaleString()} of ${total.toLocaleString()}. Use Copy all or Download for the full set.`;
+    $reposContainer.appendChild(note);
+  }
+}
+
+// âââ RATE LIMIT TRACKER âââââââââââââââââââââââââââââââââââââââââââââââââââââ
+const quota={
+  remaining:5000,total:5000,resetEpoch:0,callsSinceUpdate:0,
+  update(h){const r=parseInt(h.get("x-ratelimit-remaining")||"",10),t=parseInt(h.get("x-ratelimit-limit")||"",10),e=parseInt(h.get("x-ratelimit-reset")||"",10);if(!isNaN(r)){this.remaining=r;this.callsSinceUpdate=0;}if(!isNaN(t))this.total=t;if(!isNaN(e))this.resetEpoch=e;},
+  tick(){this.callsSinceUpdate++;},
+  effective(){return Math.max(0,this.remaining-this.callsSinceUpdate);},
+  resetMs(){return this.resetEpoch?Math.max(0,this.resetEpoch*1000-Date.now()):0;},
+  formatReset(){const ms=this.resetMs();if(!ms)return"";const m=0|ms/60000,s=Math.round((ms%60000)/1000);return m>0?`${m}m ${s}s`:`${s}s`;},
+};
+
+// âââ TOKEN POOL âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+const tokenPool = {
+  tokens: [],
+  exhausted: new Set(),
+  secondaryHits: new Map(),
+  idx: 0,
+
+  init(t) {
+    this.tokens = [...t];
+    this.exhausted.clear();
+    this.secondaryHits.clear();
+    this.idx = 0;
+  },
+
+  get(preferIdx) {
+    const now = Date.now();
+    const cool = typeof SECONDARY_COOL_MS !== "undefined" ? SECONDARY_COOL_MS : 2500;
+    const available = this.tokens.filter((tok, i) => {
+      if (this.exhausted.has(i)) return false;
+      const last = this.secondaryHits.get(tok) || 0;
+      return now - last > cool;
+    });
+    if (available.length) {
+      const pick = available[this.idx % available.length];
+      this.idx++;
+      return pick;
+    }
+    // force rotate even if all are "hot"
+    const all = this.tokens.filter((_, i) => !this.exhausted.has(i));
+    if (all.length) return all[this.idx++ % all.length];
+    return this.tokens[this.idx++ % this.tokens.length];
+  },
+
+  markExhausted(t) {
+    const i = this.tokens.indexOf(t);
+    if (i >= 0) this.exhausted.add(i);
+  },
+
+  markSecondary(t) {
+    this.secondaryHits.set(t, Date.now());
+  },
+
+  addToken(t) {
+    if (!this.tokens.includes(t)) {
+      this.tokens.push(t);
+      $token.value = this.tokens.join(", ");
+    }
+  },
+
+  clearExhausted() {
+    this.exhausted.clear();
+  }
+};
+
+async function promptForNewToken(r){return new Promise(res=>{const t=prompt(`GitHub limit (${r}). New token or cancel:`,"")||"";if(t.trim()){tokenPool.addToken(t.trim());res(t.trim());}else res(null);});}
+
+// âââ ASYNC POOL (bounded parallelism like LinkForge) ââââââââââââââââââââââââ
+async function asyncPool(items,worker,concurrency){
+  let i=0;
+  async function run(){while(i<items.length){const idx=i++;await worker(items[idx],idx);}}
+  await Promise.all(Array.from({length:Math.min(concurrency,items.length)},run));
+}
+
+// âââ GITHUB FETCH âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+function authHeaders(token){const c=String(token).replace(/[\r\n\t\0\x0b\x0c]/g,"").trim();return{"Authorization":`Bearer ${c}`,"Accept":"application/vnd.github+json","Content-Type":"application/json","X-GitHub-Api-Version":API_VER};}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+
+async function ghFetch(url, token, options = {}) {
+  let activeToken = token || tokenPool.get(0);
+  let lastErr;
+  let secondaryStreak = 0;
+
+  for (let attempt = 0; ; attempt++) {
+    try {
+      quota.tick();
+      const resp = await fetch(url, {
+        ...options,
+        headers: { ...authHeaders(activeToken), ...(options.headers || {}) }
+      });
+      quota.update(resp.headers);
+
+      if (resp.status === 403 || resp.status === 429) {
+        const txt = await resp.text().catch(() => "");
+        const retryAfter = parseInt(resp.headers.get("retry-after") || "0", 10);
+        const remaining = resp.headers.get("x-ratelimit-remaining");
+        const isSecondary =
+          /secondary rate limit/i.test(txt) ||
+          /abuse detection/i.test(txt) ||
+          /too many requests/i.test(txt) ||
+          (resp.status === 429 && remaining !== "0");
+
+        // Secondary / abuse â fixed short retry, NO streak growth
+        if (isSecondary || (retryAfter > 0 && remaining !== "0")) {
+          tokenPool.markSecondary(activeToken);
+
+          const next = tokenPool.get(attempt + 1);
+          if (next && next !== activeToken) {
+            activeToken = next;
+            log($progressLog, "Secondary â rotated token", "info");
+            await sleep(120 + Math.random() * 180);
+            continue;
+          }
+
+          // Single token: fixed short pause every time. Never multiplies.
+          // Ignore Retry-After header (github often sends huge values).
+          const wait = SECONDARY_BASE_MS + Math.random() * 200;
+          log($progressLog, `Secondary â retry in ${Math.round(wait)}ms`, "info");
+          await sleep(wait);
+          continue;
+        }
+
+        // Primary rate limit
+        if (remaining === "0" || resp.status === 429 || /rate limit/i.test(txt)) {
+          secondaryStreak = 0;
+          tokenPool.markExhausted(activeToken);
+
+          const next = tokenPool.get(attempt + 1);
+          if (next && next !== activeToken) {
+            log($progressLog, "Primary limit â switching token", "info");
+            activeToken = next;
+            continue;
+          }
+
+          const waitMs = Math.min(PRIMARY_WAIT_CAP, quota.resetMs() || 60000);
+          if (waitMs > 0) {
+            log($progressLog, `All tokens primary-limited â waiting ${quota.formatReset() || Math.round(waitMs/1000)+"s"}`, "info");
+            await sleep(waitMs + 1500);
+            try {
+              const rl = await fetch(`${API}/rate_limit`, { headers: authHeaders(activeToken) });
+              const d = await rl.json();
+              const core = d.resources?.core || d.rate;
+              quota.remaining = core.remaining;
+              quota.total = core.limit;
+              quota.resetEpoch = core.reset;
+              quota.callsSinceUpdate = 0;
+              tokenPool.clearExhausted();
+            } catch (_) {}
+            continue;
+          }
+
+          const newTok = await promptForNewToken("primary rate limit");
+          if (newTok) {
+            activeToken = newTok;
+            tokenPool.clearExhausted();
+            continue;
+          }
+          throw new Error("All tokens exhausted (primary rate limit)");
+        }
+
+        let msg = `${resp.status}`;
+        try {
+          const j = JSON.parse(txt);
+          if (j?.message) msg = j.message;
+        } catch (_) {}
+        if (attempt < 10) {
+          await sleep(1500 + attempt * 700);
+          continue;
+        }
+        throw new Error(`GitHub ${resp.status}: ${msg}`);
+      }
+
+      if (resp.status >= 500) {
+        await sleep(Math.min(15000, 1200 * (2 ** Math.min(attempt, 5))));
+        continue;
+      }
+
+      if (!resp.ok) {
+        const txt = await resp.text().catch(() => "");
+        let msg = `${resp.status}`;
+        try {
+          const j = JSON.parse(txt);
+          if (j?.message) msg = j.message;
+          if (j?.errors?.length) msg += ` â ${j.errors.map(e => e.message || JSON.stringify(e)).join("; ")}`;
+        } catch (_) {}
+        throw new Error(`GitHub ${resp.status}: ${msg}`);
+      }
+
+      secondaryStreak = 0;
+      return resp;
+    } catch (e) {
+      lastErr = e;
+      if (/All tokens exhausted/.test(e.message)) throw e;
+
+      if (/Failed to fetch|NetworkError|TypeError|fetch/i.test(String(e.message || e))) {
+        await sleep(Math.min(8000, 800 + attempt * 250));
+        continue;
+      }
+      if (/secondary/i.test(String(e.message))) {
+        await sleep(2500 + Math.random() * 1500);
+        continue;
+      }
+      throw e;
+    }
+  }
+}
+
+async function ghJson(url,token,options={}){const r=await ghFetch(url,token,options);if(r.status===204)return null;return r.json();}
+
+// âââ QUOTA ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+async function fetchAndUpdateQuota(token){
+  try{const r=await fetch(`${API}/rate_limit`,{headers:authHeaders(token)});const d=await r.json();const c=d.resources?.core||d.rate;quota.remaining=c.remaining;quota.total=c.limit;quota.resetEpoch=c.reset;quota.callsSinceUpdate=0;}catch(_){}
+}
+async function ensureQuota(token,needed){
+  // Soft check only â never blocks publishing. Token rotation + retries handle limits.
+  try{
+    if(quota.callsSinceUpdate>=50)await fetchAndUpdateQuota(token);
+    const eff=quota.effective();
+    if(eff<needed){
+      await fetchAndUpdateQuota(token);
+      const waitMs=quota.resetMs();
+      if(waitMs>0&&waitMs<600000){
+        log($progressLog,`Low quota â brief wait ${quota.formatReset()} then continueâ¦`,"info");
+        await sleep(Math.min(waitMs+1000,30000));
+        await fetchAndUpdateQuota(token);
+      }
+    }
+  }catch(_){}
+}
+
+// âââ CORE REPO PROCESSOR (mirrors LinkForge processRepo exactly) âââââââââââââ
+// Per repo: createRepo â [getMainBranch + createBlob in parallel] â createTree â createCommit â updateRef/createRef
+// That's 3 serial steps instead of 5. No pre-probing needed.
+async function processRepo({token,owner,repoName,fileNames,content,encoding,onStep}){
+  // Step 1: create repo (swallows 422 if exists)
+  try{
+    await ghFetch(`${API}/user/repos`,token,{method:"POST",body:JSON.stringify({name:repoName,private:false,auto_init:true})});
+  }catch(e){if(!/422|already exists/i.test(e.message))throw e;}
+
+  // Step 2: getMainBranch + createBlob in PARALLEL â both independent
+  const [branchData,blobSha]=await Promise.all([
+    // getMainBranch: try main then master â just 1 API call
+    (async()=>{
+      for(const branch of["main","master"]){
+        try{
+          const data=await ghJson(`${API}/repos/${owner}/${repoName}/git/refs/heads/${branch}`,token);
+          if(data?.object?.sha)return{sha:data.object.sha,branch};
+        }catch(_){}
+      }
+      return null; // new repo not ready yet â will use createRef
+    })(),
+    // createBlob
+    ghJson(`${API}/repos/${owner}/${repoName}/git/blobs`,token,{
+      method:"POST",body:JSON.stringify({content,encoding:encoding||"utf-8"}),
+    }).then(d=>d.sha),
+  ]);
+
+  // If branch not ready yet, wait and retry getMainBranch
+  let branch=branchData;
+  if(!branch){
+    for(let i=0;i<30;i++){
+      await sleep(i===0?200:150);
+      try{
+        const data=await ghJson(`${API}/repos/${owner}/${repoName}/git/refs/heads/main`,token);
+        if(data?.object?.sha){branch={sha:data.object.sha,branch:"main"};break;}
+      }catch(_){}
+    }
+  }
+
+  // Step 3: createTree â no base_tree for new repos (saves an extra SHA lookup)
+  const entries=fileNames.map(path=>({path,mode:"100644",type:"blob",sha:blobSha}));
+  const chunks=[];
+  for(let i=0;i<entries.length;i+=TREE_CHUNK)chunks.push(entries.slice(i,i+TREE_CHUNK));
+
+  let treeSha;
+  for(const chunk of chunks){
+    const body={tree:chunk};
+    if(treeSha)body.base_tree=treeSha; // chain chunks; omit for first chunk of new repo
+    else if(branch)body.base_tree=undefined; // existing repo: let GitHub use the existing tree
+    // Note: for existing repos with files already there, we need to pass the existing treeSha
+    // as base_tree. We get it from the commit object if branch exists.
+    const treeBody=branch&&!treeSha?{base_tree:await ghJson(`${API}/repos/${owner}/${repoName}/git/commits/${branch.sha}`,token).then(c=>c.tree.sha),tree:chunk}:{tree:chunk,...(treeSha?{base_tree:treeSha}:{})};
+    const tree=await ghJson(`${API}/repos/${owner}/${repoName}/git/trees`,token,{method:"POST",body:JSON.stringify(treeBody)});
+    treeSha=tree.sha;
+  }
+  onStep?.(`  tree ${treeSha.slice(0,8)}`,"dim");
+
+  // Step 4+5: createCommit then update/create ref
+  const commitBody={message:`Publish ${fileNames.length} files via P2P V3`,tree:treeSha,...(branch?{parents:[branch.sha]}:{})};
+  const commit=await ghJson(`${API}/repos/${owner}/${repoName}/git/commits`,token,{method:"POST",body:JSON.stringify(commitBody)});
+  onStep?.(`  commit ${commit.sha.slice(0,8)}`,"dim");
+
+  if(branch){
+    await ghJson(`${API}/repos/${owner}/${repoName}/git/refs/heads/${branch.branch}`,token,{method:"PATCH",body:JSON.stringify({sha:commit.sha,force:true})});
+  } else {
+    await ghJson(`${API}/repos/${owner}/${repoName}/git/refs`,token,{method:"POST",body:JSON.stringify({ref:"refs/heads/main",sha:commit.sha})});
+  }
+  onStep?.(`\u2713 ${owner}/${repoName}: ${fileNames.length} files`,"ok");
+  return{branch:branch?.branch||"main",commitSha:commit.sha};
+}
+
+// âââ GENERATE FILE NAMES ââââââââââââââââââââââââââââââââââââââââââââââââââââ
+function getExt(filename){
+  const m=String(filename||"").match(/(\.[a-z0-9]{1,12})$/i);
+  return m?m[1].toLowerCase():"";
+}
+// Text types â store as UTF-8 so HTML/JS/CSS content is exact source
+const TEXT_EXTS=new Set([".html",".htm",".xhtml",".svg",".xml",".js",".mjs",".cjs",".css",".json",".txt",".md",".markdown",".csv",".tsv",".map",".ts",".tsx",".jsx",".vue",".svelte",".astro",".yaml",".yml",".toml",".ini",".cfg",".conf",".sh",".bash",".zsh",".py",".rb",".php",".sql",".graphql",".gql",".wasm",".liquid",".njk",".ejs",".hbs",".mustache",".rss",".atom",".vtt",".srt",".log",".env",".gitignore",".editorconfig",".svgz"]);
+function isTextFile(name,mime){
+  const ext=getExt(name);
+  if(TEXT_EXTS.has(ext))return true;
+  if(mime&&(/^text\//i.test(mime)||/json|xml|javascript|svg/i.test(mime)))return true;
+  return false;
+}
+async function fileToPayload(file){
+  // Returns {content, encoding} for GitHub blobs API
+  if(isTextFile(file.name,file.type)){
+    const text=await file.text(); // full UTF-8 HTML/JS/CSS source
+    return {content:text,encoding:"utf-8",ext:getExt(file.name),bytes:new TextEncoder().encode(text).length};
+  }
+  const buf=await file.arrayBuffer();
+  const bytes=new Uint8Array(buf);
+  let binary="";
+  const chunk=0x8000;
+  for(let i=0;i<bytes.length;i+=chunk){
+    binary+=String.fromCharCode.apply(null,bytes.subarray(i,i+chunk));
+  }
+  return {content:btoa(binary),encoding:"base64",ext:getExt(file.name),bytes:bytes.length};
+}
+function extFromContentType(ct){
+  if(!ct)return"";
+  const t=ct.split(";")[0].trim().toLowerCase();
+  const map={
+    "text/html":".html","application/xhtml+xml":".html",
+    "text/css":".css","text/javascript":".js","application/javascript":".js","application/json":".json",
+    "image/svg+xml":".svg","image/png":".png","image/jpeg":".jpg","image/gif":".gif","image/webp":".webp",
+    "application/pdf":".pdf","text/plain":".txt","text/markdown":".md","application/xml":".xml","text/xml":".xml",
+    "application/zip":".zip","video/mp4":".mp4","audio/mpeg":".mp3"
+  };
+  return map[t]||"";
+}
+function filenameFromUrl(urlStr){
+  try{
+    const u=new URL(urlStr);
+    const base=(u.pathname.split("/").filter(Boolean).pop()||"").split("?")[0];
+    return base||"";
+  }catch{return"";}
+}
+async function urlToPayload(urlStr){
+  let raw=String(urlStr||"").trim();
+  // auto-prepend https if user forgot protocol
+  if(raw && !/^https?:\/\//i.test(raw)) raw = "https://" + raw;
+  if(!/^https?:\/\//i.test(raw)) throw new Error("URL must start with http:// or https://");
+
+  // strip common tracking junk that breaks some proxies
+  try {
+    const u = new URL(raw);
+    ["utm_source","utm_medium","utm_campaign","utm_term","utm_content","fbclid","gclid"].forEach(k=>u.searchParams.delete(k));
+    raw = u.toString();
+  } catch(_){}
+
+  const proxies = [
+    // direct first (no proxy)
+    null,
+    // Reliable CORS proxy workers (Cloudflare Workers â fastest)
+    u => `https://corsproxy.io/?url=${encodeURIComponent(u)}`,
+    u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+    u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
+    u => `https://thingproxy.freeboard.io/fetch/${u}`,
+    u => `https://api.cors.lol/?url=${encodeURIComponent(u)}`,
+    u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
+    u => `https://proxy.cors.sh/${u}`,
+    u => `https://cors-anywhere.herokuapp.com/${u}`,
+    u => `https://crossorigin.me/${u}`,
+    u => `https://jsonp.afeld.me/?url=${encodeURIComponent(u)}`,
+  ];
+
+  let resp = null;
+  let usedProxy = false;
+  let lastErr = null;
+
+  for (let pi = 0; pi < proxies.length; pi++) {
+    const make = proxies[pi];
+    const target = make ? make(raw) : raw;
+    const label = make ? `proxy #${pi}` : "direct";
+    try {
+      const controller = new AbortController();
+      const timeoutMs = make ? 15000 : 8000;
+      const timer = setTimeout(() => controller.abort(), timeoutMs);
+      resp = await fetch(target, {
+        method: "GET",
+        mode: "cors",
+        credentials: "omit",
+        redirect: "follow",
+        signal: controller.signal,
+        headers: {
+          "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+          "User-Agent": "Mozilla/5.0 (compatible; P2PBot/3.0)",
+        }
+      });
+      clearTimeout(timer);
+      if (resp.status === 404) throw new Error(`HTTP 404 Not Found`);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      usedProxy = !!make;
+      lastErr = null;
+      break;
+    } catch (e) {
+      lastErr = e;
+      resp = null;
+      // try next proxy silently
+    }
+  }
+
+  if (!resp) {
+    throw new Error(`Could not fetch URL â tried direct + ${proxies.length - 1} proxies. Last error: ${lastErr?.message || lastErr || "Load failed"}. Try a different URL or check your connection.`);
+  }
+
+  const ct = (resp.headers.get("content-type") || "").toLowerCase();
+  const nameHint = filenameFromUrl(raw);
+  let ext = getExt(nameHint) || extFromContentType(ct) || ".bin";
+
+  // force html when content looks like a page but path has no extension
+  const looksHtml = /text\/html|application\/xhtml/i.test(ct) ||
+                    (!getExt(nameHint) && /html|doctype/i.test(ct));
+  if (looksHtml && !/\.html?$/i.test(ext)) ext = ".html";
+
+  // text path for HTML/JS/CSS/JSON/SVG etc.
+  if (isTextFile(nameHint || ("x" + ext), ct) || /html|xml|javascript|json|svg|text\//i.test(ct) || looksHtml) {
+    let text = await resp.text();
+    // some proxies wrap JSON â unwrap if needed
+    if (usedProxy && text.trimStart().startsWith("{") && /"contents?"\s*:/.test(text.slice(0, 200))) {
+      try {
+        const j = JSON.parse(text);
+        if (typeof j.contents === "string") text = j.contents;
+        else if (typeof j.content === "string") text = j.content;
+      } catch(_){}
+    }
+    return {
+      content: text,
+      encoding: "utf-8",
+      ext,
+      bytes: new TextEncoder().encode(text).length,
+      source: raw,
+      usedProxy
+    };
+  }
+
+  const buf = await resp.arrayBuffer();
+  const bytes = new Uint8Array(buf);
+  let binary = "";
+  const chunk = 0x8000;
+  for (let i = 0; i < bytes.length; i += chunk) {
+    binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
+  }
+  return {
+    content: btoa(binary),
+    encoding: "base64",
+    ext,
+    bytes: bytes.length,
+    source: raw,
+    usedProxy
+  };
+}
+function makeFileName(n, mainWords, sideWords, ext){
+  const m = mainWords[n % mainWords.length];
+  const s = sideWords[(n * 7) % sideWords.length];
+  const rand = (Math.random() * 1e9 | 0).toString(36);
+  return m + "-" + s + "-" + (n + 1) + "-" + rand + (ext || "");
+}
+
+// Generate only the slice needed for one repo (memory safe for millions)
+function generateFileNamesSlice(start, count, mainWords, sideWords, ext){
+  const names = new Array(count);
+  for (let i = 0; i < count; i++) {
+    names[i] = makeFileName(start + i, mainWords, sideWords, ext);
+  }
+  return names;
+}
+
+// âââ MAIN PUBLISH (streaming / low-memory) ââââââââââââââââââââââââââââââââââ
+async function publish({tokens,owner,prefix,mainWords,sideWords,count,ext,onStep,onProgress}){
+  const numRepos = Math.ceil(count / MAX_PER_REPO);
+  onStep?.(`Planning ${count.toLocaleString()} files â ${numRepos} repo(s)â¦`, "info");
+
+  const mw = [...new Set(mainWords.filter(Boolean))];
+  const sw = [...new Set(sideWords.filter(Boolean))];
+  if (!mw.length || !sw.length) throw new Error("Add words");
+
+  // Don't pre-build a million strings. Build per-repo slices only.
+  const assignments = [];
+  for (let i = 0; i < numRepos; i++) {
+    const start = i * MAX_PER_REPO;
+    const len = Math.min(MAX_PER_REPO, count - start);
+    const name = `${prefix}-${i + 1}`;
+    assignments.push({
+      name,
+      fullName: `${owner}/${name}`,
+      start,
+      count: len,
+      // files generated lazily right before commit to save RAM
+      files: null,
+      token: tokenPool.get(i),
+      _mw: mw,
+      _sw: sw,
+      _ext: ext || ""
+    });
+  }
+
+  // Compact allLinks: only store {repo, branch, file} but build in chunks
+  // For UI we still need names â generate on the fly when rendering/downloading
+  // Store a lightweight plan instead of full objects when huge
+  const HUGE = count > 200000;
+  let allLinks;
+  if (HUGE) {
+    // deferred mode â allLinks is a thin proxy rebuilt from assignments when needed
+    allLinks = [];
+    state._huge = true;
+    state._plan = { assignments, count, mw, sw, ext: ext || "", owner, prefix };
+    onStep?.(`Huge batch mode (${count.toLocaleString()}) â names generated per-repo to save memory`, "ok");
+  } else {
+    state._huge = false;
+    state._plan = null;
+    allLinks = new Array(count);
+    let k = 0;
+    for (const a of assignments) {
+      const files = generateFileNamesSlice(a.start, a.count, mw, sw, ext || "");
+      a.files = files;
+      for (const f of files) {
+        allLinks[k++] = { repo: a.fullName, branch: "main", file: f };
+      }
+    }
+    onStep?.(`Generated ${allLinks.length.toLocaleString()} names â ${numRepos} repo(s)`, "ok");
+  }
+
+  return { allLinks, assignments, fileNames: null };
+}
+
+// âââ SUBMIT âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+$submitBtn.addEventListener("click",async()=>{
+  const rawTokens=$token.value.split(/[\s,]+/).map(s=>s.replace(/[^\w\-]/g,"")).filter(s=>s.length>10);
+  if(!rawTokens.length)return showToast("Enter at least one GitHub token","error");
+  const bad=rawTokens.filter(t=>!/^gh[a-z]_/.test(t)&&!/^github_pat_/.test(t));
+  if(bad.length)return showToast(`Invalid token: ${bad[0].slice(0,12)}â¦`,"error");
+  const uploadFile=$fileInput.files?.[0];
+  const sourceUrl=($("source-url")?.value||"").trim();
+  const mainWords=splitWords($mainWords.value),sideWords=splitWords($sideWords.value);
+  const count=parseInt($count.value,10),prefix=$autoPrefix.value.trim()||"p2p-files";
+  if(sourceMode==="url"){
+    if(!sourceUrl)return showToast("Enter a URL","error");
+  }else{
+    if(!uploadFile)return showToast("Upload a file","error");
+  }
+  if(!mainWords.length||!sideWords.length)return showToast("Add words","error");
+  if(!Number.isFinite(count)||count<1||Math.floor(count)!==count)return showToast("Count must be a whole number â¥ 1","error");
+  if(count>10_000_000)return showToast("Max 10,000,000 per run. Use smaller batches if the tab crashes.","error");
+
+  $submitBtn.disabled=true;$progressPanel.classList.remove("hidden");$progressLog.innerHTML="";$progressBar.style.width="0%";$progressPct.textContent="0 / "+count.toLocaleString();
+
+  try{
+    let payload;
+    if(sourceMode==="url"){
+      log($progressLog,`Fetching URLâ¦`,"info");
+      payload=await urlToPayload(sourceUrl);
+      log($progressLog,`URL${payload.usedProxy?" (via proxy)":""}: ${sourceUrl} â ${payload.ext} (${payload.encoding}, ${(payload.bytes/1024).toFixed(1)} KB)`,"ok");
+    }else{
+      payload=await fileToPayload(uploadFile);
+      log($progressLog,`File: ${uploadFile.name} (${payload.encoding}, ${(payload.bytes/1024).toFixed(1)} KB)`,"info");
+    }
+    const fileExt=payload.ext;
+    if(payload.encoding==="utf-8"){
+      const head=payload.content.slice(0,200).replace(/\s+/g," ");
+      log($progressLog,`Content preview: ${head.slice(0,120)}${head.length>120?"â¦":""}`,"dim");
+    }
+    // Auto HTML CDNs when publishing HTML from URL
+    if(fileExt===".html"||fileExt===".htm"){
+      state.selectedCdns.clear();
+      CDN_PROVIDERS.filter(x=>x.htmlOk).forEach(x=>state.selectedCdns.add(x.id));
+      buildCdnGrid();
+    }
+    const fileContent=payload.content;
+    const fileEncoding=payload.encoding;
+
+    // Validate tokens in parallel
+    log($progressLog,`Validating ${rawTokens.length} token(s)â¦`,"info");
+    const checks=await Promise.allSettled(rawTokens.map(t=>fetch(`${API}/user`,{headers:authHeaders(t)}).then(r=>r.json()).then(d=>{if(!d.login)throw new Error("no login");return{t,login:d.login};})));
+    const good=[];
+    checks.forEach((r,i)=>{if(r.status==="fulfilled"){good.push(r.value.t);log($progressLog,`  Token ${i+1}: \u2713 ${r.value.login}`,"ok");}else log($progressLog,`  Token ${i+1}: \u2717 dropped`,"err");});
+    if(!good.length){showToast("All tokens invalid","error");throw new Error("No valid tokens");}
+    tokenPool.init(good);
+
+    const user=await fetch(`${API}/user`,{headers:authHeaders(good[0])}).then(r=>r.json());
+    const owner=user.login;
+    log($progressLog,`Publishing as ${owner}`,"ok");
+
+    // Quota check
+    await fetchAndUpdateQuota(good[0]);
+    const numRepos=Math.ceil(count/MAX_PER_REPO);
+    log($progressLog,`Quota: ${quota.effective().toLocaleString()} / ${quota.total.toLocaleString()}${quota.formatReset()?" â resets in "+quota.formatReset():""} (no hard limit â will rotate tokens / wait as needed)`,"ok");
+
+    // Generate plan instantly â no probing
+    const {allLinks,assignments}=await publish({
+      tokens:good,owner,prefix,
+      mainWords:mainWords.map(toSlug),sideWords:sideWords.map(toSlug),
+      count,ext:fileExt,
+      onStep:(msg,type)=>log($progressLog,msg,type||""),
+      onProgress:()=>{},
+    });
+
+    // Show links immediately
+    const publishedCount = state._huge ? count : allLinks.length;
+    state.result={publishedCount,repos:[],links:allLinks,failed:[],shortfall:0};
+    state.allLinks=allLinks;
+    // skip giant Map on huge batches (branch updates applied per-repo after commit)
+    if(!state._huge){
+      state.linkMap=new Map(allLinks.map(l=>[l.repo+"\0"+l.file,l]));
+    } else {
+      state.linkMap=null;
+    }
+    showResultsPanel(state.result);
+    $progressBar.style.width="5%";
+    const numR = Math.ceil(count / MAX_PER_REPO);
+    const linkTotal=publishedCount*Math.max(1,state.selectedCdns.size);
+    log($progressLog,`\u26a1 ${publishedCount.toLocaleString()} files (~${linkTotal.toLocaleString()} CDN links) â committing ${numR} repo(s)â¦`,"ok");
+    showToast(`${publishedCount.toLocaleString()} files queued â committingâ¦`,"success");
+    $submitBtn.disabled=false;$submitBtn.textContent="Publish to GitHub";
+
+    // Commit in background using asyncPool â bounded CONCURRENCY like LinkForge
+    let committed=0,failCount=0;
+    asyncPool(assignments,async(a,idx)=>{
+      let res=null,lastErr=null;
+      // Keep trying this repo until success or primary tokens are fully exhausted
+      for(let repoTry=0;;repoTry++){
+        try{
+          await ensureQuota(a.token,5);
+          log($progressLog,`[${a.name}] processing${repoTry?` (retry ${repoTry})`:""}â¦`,"dim");
+          if(!a.files){
+            a.files = generateFileNamesSlice(a.start, a.count, a._mw, a._sw, a._ext);
+          }
+          res=await processRepo({token:a.token,owner,repoName:a.name,fileNames:a.files,content:fileContent,encoding:fileEncoding,onStep:(msg,type)=>log($progressLog,`[${a.name}] ${msg}`,type)});
+          lastErr=null;
+          break;
+        }catch(e){
+          lastErr=e;
+          if(/All tokens exhausted/.test(e.message)){
+            log($progressLog,`[${a.name}] stopped â ${e.message}`,"err");
+            break;
+          }
+          // Any other failure: wait and retry the whole repo (secondary already handled inside ghFetch)
+          const wait=2000;
+          log($progressLog,`[${a.name}] ${e.message} â retrying in 2sâ¦`,"info");
+          await sleep(wait);
+        }
+      }
+      if(res){
+        committed+=a.files.length;
+        const pct=5+Math.round((committed/count)*95);
+        $progressBar.style.width=pct+"%";
+        $progressPct.textContent=`${committed.toLocaleString()} / ${count.toLocaleString()} committed`;
+        if(state.linkMap){
+          a.files.forEach(f=>{
+            const link=state.linkMap.get(a.fullName+"\0"+f);
+            if(link)link.branch=res.commitSha;
+          });
+        }
+        // free names after commit to keep memory flat on million-scale runs
+        a.files = null;
+      }else{
+        failCount+=a.files.length;
+        log($progressLog,`\u2717 ${a.name}: ${lastErr?.message||"failed"}`,"err");
+        state.result.failed.push(...a.files.map(f=>({name:f,repo:a.fullName,error:lastErr?.message||"failed"})));
+        if(state.result.failed.length)$failedContainer.innerHTML=`<div class="failed-section"><div class="failed-header">${state.result.failed.length} failed to commit</div></div>`;
+      }
+    },CONCURRENCY).then(()=>{
+      $progressBar.style.width="100%";
+      const msg=failCount?`${committed.toLocaleString()} committed, ${failCount.toLocaleString()} failed`:`All ${committed.toLocaleString()} files committed!`;
+      log($progressLog,msg,failCount?"info":"ok");
+      showToast(msg,"success");
+    });
+
+  }catch(err){log($progressLog,`Fatal: ${err.message}`,"err");showToast(err.message||"Failed","error");}
+  finally{$submitBtn.disabled=false;$submitBtn.textContent="Publish to GitHub";}
+});
+
+// âââ RESULTS ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+function showResultsPanel(result){
+  $results.classList.remove("hidden");
+  if(result.shortfall>0){$shortfall.textContent=`${result.shortfall.toLocaleString()} files could not be placed.`;$shortfall.classList.remove("hidden");}else $shortfall.classList.add("hidden");
+  $failedContainer.innerHTML="";
+  rerenderLinks();
+}
+
+$copyAllBtn.onclick=async()=>{
+  const total=totalLinkCount();
+  if(!total)return showToast("No links","error");
+  if(total>50000){
+    showToast("Too many for clipboard â downloading .txt instead","info");
+    return downloadAllLinks("file-links.txt",false);
+  }
+  const l=buildAllLinks(total);
+  try{await navigator.clipboard.writeText(l.join("\n"));showToast(`${l.length.toLocaleString()} copied`,"success");}catch{showToast("Clipboard failed","error");}
+};
+$dlLinksBtn.onclick=()=>downloadAllLinks("file-links.txt",false);
+$dlJsonBtn.onclick=()=>downloadAllLinks("file-links.json",true);
+$openRandomBtn.onclick=()=>{
+  if(!state.allLinks.length||!selectedCdns().length)return showToast("No links","error");
+  const cdns=selectedCdns();
+  const x=state.allLinks[0|Math.random()*state.allLinks.length];
+  const c=cdns[0|Math.random()*cdns.length];
+  window.open(c.fn(x.repo,x.branch,x.file),"_blank","noopener");
+};
+$dlPageBtn.onclick=()=>{const clone=document.documentElement.cloneNode(true);clone.querySelector("#token").value="";clone.querySelector("#results")?.classList.add("hidden");clone.querySelector("#progress-panel")?.classList.add("hidden");clone.querySelector("#progress-log")?.replaceChildren();clone.querySelector("#repos-container")?.replaceChildren();clone.querySelector("#failed-container")?.replaceChildren();downloadText("p2p-v3.html","<!DOCTYPE html>\n"+clone.outerHTML,"text/html;charset=utf-8");showToast("Page downloaded","success");};
+
+// âââ EDITOR âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+let editorRepoState=null;
+$editorLoadBtn.onclick=async()=>{
+  const token=$token.value.split(",")[0].trim().replace(/[^\w\-]/g,""),repoName=$editorRepo.value.trim();
+  if(!token)return showToast("Enter a token","error");
+  if(!/^[^/\s]+\/[^/\s]+$/.test(repoName))return showToast("Repo must be owner/repo","error");
+  $editorLoadBtn.disabled=true;$editorStatus.textContent="Loadingâ¦";
+  try{
+    // Load repo files for editor
+    const info=await ghJson(`${API}/repos/${repoName}`,token);
+    const branch=info.default_branch||"main";
+    const ref=await ghJson(`${API}/repos/${repoName}/git/refs/heads/${branch}`,token);
+    const commit=await ghJson(`${API}/repos/${repoName}/git/commits/${ref.object.sha}`,token);
+    const tree=await ghJson(`${API}/repos/${repoName}/git/trees/${commit.tree.sha}?recursive=1`,token);
+    const files=new Set((tree.tree||[]).filter(x=>x.type==="blob"&&!x.path.startsWith(".")).map(x=>x.path));
+    editorRepoState={fullName:repoName,branch,files,head:{commitSha:ref.object.sha,treeSha:commit.tree.sha}};
+    $editorStatus.textContent=`Found ${files.size.toLocaleString()} files`;
+    $editorPanel.classList.remove("hidden");
+  }catch(e){$editorStatus.textContent=`Error: ${e.message}`;$editorPanel.classList.add("hidden");}
+  finally{$editorLoadBtn.disabled=false;}
+};
+$editorSubmitBtn.onclick=async()=>{
+  const token=$token.value.split(",")[0].trim().replace(/[^\w\-]/g,"");
+  if(!token||!editorRepoState)return showToast("Load a repo first","error");
+  const newFile=$editorFileInput.files?.[0];if(!newFile)return showToast("Choose a file","error");
+  $editorSubmitBtn.disabled=true;$editorProgressPanel.classList.remove("hidden");$editorLog.innerHTML="";$editorProgressBar.style.width="0%";
+  try{
+    const payload=await fileToPayload(newFile);
+    log($editorLog,`File: ${newFile.name} (${payload.encoding}, ${(payload.bytes/1024).toFixed(1)} KB)`,"info");
+    const files=[...(editorRepoState.files)];
+    const [owner,repoName]=editorRepoState.fullName.split("/");
+    await processRepo({token,owner,repoName,fileNames:files,content:payload.content,encoding:payload.encoding,
+      onStep:(msg,type)=>{log($editorLog,msg,type||"");$editorProgressBar.style.width=Math.min(95,($editorLog.children.length/5)*20)+"%";}});
+    $editorProgressBar.style.width="100%";showToast(`Rewrote ${files.length.toLocaleString()} files`,"success");log($editorLog,`Done â ${files.length} files rewritten`,"ok");
+  }catch(e){log($editorLog,`Error: ${e.message}`,"err");showToast(`Editor failed: ${e.message}`,"error");}
+  finally{$editorSubmitBtn.disabled=false;$editorSubmitBtn.textContent="Rewrite all files";}
+};
+
+// âââ UTILS ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+function splitWords(s){return[...new Set(String(s).split(",").map(w=>w.trim()).filter(Boolean))];}
+function toSlug(s){return String(s).toLowerCase().replace(/[^a-z0-9-]+/g,"-").replace(/^-+|-+$/g,"")||"file";}
+function escapeHtml(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function downloadText(filename,text,type="text/plain;charset=utf-8"){const blob=new Blob([text],{type}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+function showToast(msg,type="info"){const t=document.createElement("div");t.className=`toast ${type}`;t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),4000);}
+</script>
+
+
+<script></script>
+
+<script>
+(function(){
+  const whitelist = ['', /* â¦ */];
+  const blacklist = [
+    'http://127.0.0.1:5500/index.html',
+    'http://127.0.0.1:5500/',
+    '127.0.0.1:5500',
+    'http://127.0.0.1:5500',
+    '127.0.0.1',
+    '127.0.0.1/',
+    '/',
+    'https://127.0.0.1:5500/',
+    'https://codlico.com',
+    'http://codlico.com',
+    'codlico.com'
+  ];
+
+  document.addEventListener('click', e => {
+    const anchor = e.target.closest('a');
+    if (!anchor) return;
+
+    const href = (anchor.getAttribute('href') || '').trim();
+    if (!href || href === '#' ||
+        href.startsWith('javascript:') ||
+        href.startsWith('mailto:')) {
+      e.preventDefault();
+      return;
+    }
+
+    let url;
+    try {
+      url = new URL(href, location.href);
+    } catch {
+      e.preventDefault();
+      return;
+    }
+    const fullHref = url.href;
+
+    if (blacklist.some(bl => fullHref.startsWith(bl))) {
+      e.preventDefault();
+      return;
+    }
+    if (whitelist.some(wl => fullHref.startsWith(wl))) {
+      return;
+    }
+    if (url.origin === location.origin) {
+      e.preventDefault();
+      return;
+    }
+    if (anchor.target === '_blank') {
+      window.open(fullHref, '_blank');
+      e.preventDefault();
+    }
+  });
+})();
+</script>
+<script>
+    document.addEventListener('keydown', e => {
+      const ctrl = e.ctrlKey || e.metaKey;
+      const key = e.key.toLowerCase();
+
+      if (ctrl && key === 's')      { e.preventDefault(); parent.document.getElementById('save-btn').click(); }
+      else if (ctrl && key === 'o') { e.preventDefault(); parent.document.getElementById('open-label').click(); }
+      else if (ctrl && key === 'u') { e.preventDefault(); parent.document.getElementById('kit-save').click(); }
+      else if (ctrl && key === 'i') { e.preventDefault(); parent.document.getElementById('indent-btn').click(); }
+      else if (ctrl && key === 'k') { e.preventDefault(); parent.document.getElementById('download-all-btn').click(); }
+      else if (ctrl && key === '1') { e.preventDefault(); parent.document.getElementById('html-tab-btn').click(); }
+      else if (ctrl && key === '2') { e.preventDefault(); parent.document.getElementById('css-tab-btn').click(); }
+      else if (ctrl && key === '3') { e.preventDefault(); parent.document.getElementById('js-tab-btn').click(); }
+      else if (ctrl && key === 'e') { e.preventDefault(); parent.document.getElementById('kit-btn').click(); }
+      else if (ctrl && key === 'b') { e.preventDefault(); parent.document.getElementById('lib-btn').click(); }
+      else if (ctrl && key === 'r') { e.preventDefault(); parent.document.getElementById('theme-toggle').click(); }
+      else if (ctrl && key === 'f') { e.preventDefault(); parent.document.getElementById('find-btn')?.click(); }
+      else if (ctrl && key === 'g') { e.preventDefault(); parent.document.getElementById('find-persistent-btn')?.click(); }
+      else if (ctrl && key === 'h') { e.preventDefault(); parent.document.getElementById('replace-btn')?.click(); }
+      else if (ctrl && key === 'a') { e.preventDefault(); parent.document.getElementById('select-all-btn')?.click(); }
+      else if (ctrl && key === '/') { e.preventDefault(); parent.document.getElementById('toggle-comment-btn')?.click(); }
+      else if (ctrl && key === 'l') { e.preventDefault(); parent.document.getElementById('duplicate-line-btn')?.click(); }
+      else if (ctrl && key === 'd') { e.preventDefault(); parent.document.getElementById('delete-line-btn')?.click(); }
+      else if (key === 'f1')  { e.preventDefault(); parent.document.getElementById('info-btn').click(); }
+      else if (key === 'f2')  { e.preventDefault(); parent.document.getElementById('view-toggle').click(); }
+      else if (key === 'f3')  { e.preventDefault(); parent.document.getElementById('editor-zoom-out').click(); }
+      else if (key === 'f4')  { e.preventDefault(); parent.document.getElementById('editor-zoom-in').click(); }
+      else if (key === 'f8')  { e.preventDefault(); parent.document.getElementById('reset-names-btn').click(); }
+      else if (key === 'f6')  { e.preventDefault(); parent.document.getElementById('zoom-out').click(); }
+      else if (key === 'f7')  { e.preventDefault(); parent.document.getElementById('zoom-in').click(); }
+      else if (ctrl && key === 'q') { e.preventDefault(); parent.document.getElementById('fold-btn')?.click(); }
+      else if (ctrl && key === 'm') { e.preventDefault(); parent.document.getElementById('go-to-bracket-btn')?.click();  }
+      else if (ctrl && key === '7') { 
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  e.stopPropagation();
+  parent.document.getElementById('zoom-mode-switch').click();
+}
+else if (ctrl && key === '8') { 
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  e.stopPropagation();
+  parent.document.getElementById('preview-preserve-toggle').click();
+}
+else if (ctrl && key === 'u') { 
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  e.stopPropagation();
+  parent.document.getElementById('kit-save').click();
+}
+    });
+  </script>
+
+</body></html>
